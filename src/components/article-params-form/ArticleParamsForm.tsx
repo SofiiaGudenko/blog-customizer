@@ -61,8 +61,7 @@ export const ArticleParamsForm = ({
 	return (
 		<aside
 			className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
-			ref={formRef} // Привязываем ссылку к контейнеру
-		>
+			ref={formRef}>
 			<form className={styles.form} onSubmit={handleSubmit}>
 				<Text as='h1' size={25} weight={800} uppercase>
 					Задайте параметры
