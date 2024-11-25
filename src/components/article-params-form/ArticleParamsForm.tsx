@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
@@ -11,31 +11,38 @@ import {
 	backgroundColors,
 	contentWidthArr,
 	ArticleStateType,
+	defaultArticleState,
 } from 'src/constants/articleProps';
+import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 import styles from './ArticleParamsForm.module.scss';
 
 type ArticleParamsFormProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	onApply: (settings: ArticleStateType) => void;
-	onReset: () => void;
-	defaultSettings: ArticleStateType;
 };
 
 export const ArticleParamsForm = ({
 	isOpen,
 	onClose,
 	onApply,
-	onReset,
-	defaultSettings,
 }: ArticleParamsFormProps) => {
-	const [formSettings, setFormSettings] = useState(defaultSettings);
+	const [formSettings, setFormSettings] = useState(defaultArticleState);
+	const formRef = useRef<HTMLDivElement | null>(null);
 
-	useEffect(() => {
-		setFormSettings(defaultSettings);
-	}, [defaultSettings]);
+	useOutsideClickClose({
+		isOpen,
+		rootRef: formRef,
+		onClose,
+		onChange: (value) => {
+			if (!value) onClose();
+		},
+	});
 
-	const handleChange = (key: keyof ArticleStateType, value: any) => {
+	const handleChange = <K extends keyof ArticleStateType>(
+		key: K,
+		value: ArticleStateType[K]
+	) => {
 		setFormSettings((prev) => ({ ...prev, [key]: value }));
 	};
 
@@ -45,9 +52,17 @@ export const ArticleParamsForm = ({
 		onClose();
 	};
 
+	const handleReset = () => {
+		setFormSettings(defaultArticleState);
+		onApply(defaultArticleState);
+		onClose();
+	};
+
 	return (
 		<aside
-			className={`${styles.container} ${isOpen ? styles.container_open : ''}`}>
+			className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
+			ref={formRef} // Привязываем ссылку к контейнеру
+		>
 			<form className={styles.form} onSubmit={handleSubmit}>
 				<Text as='h1' size={25} weight={800} uppercase>
 					Задайте параметры
@@ -96,10 +111,7 @@ export const ArticleParamsForm = ({
 						title='Сбросить'
 						htmlType='button'
 						type='clear'
-						onClick={() => {
-							onReset();
-							onClose();
-						}}
+						onClick={handleReset}
 					/>
 					<Button title='Применить' htmlType='submit' type='apply' />
 				</div>

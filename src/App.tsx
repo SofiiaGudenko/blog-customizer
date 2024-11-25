@@ -1,32 +1,21 @@
 import styles from './styles/index.module.scss';
 import { ArrowButton } from './ui/arrow-button/ArrowButton';
-import clsx from 'clsx';
-import { useState, CSSProperties, SetStateAction } from 'react';
+import { useState, CSSProperties } from 'react';
 import { Article } from './components/article/Article';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
-import { defaultArticleState, OptionType } from './constants/articleProps';
+import { defaultArticleState } from './constants/articleProps';
 
 const App = () => {
 	const [isSidebarOpen, setSidebarOpen] = useState(false);
 	const [articleSettings, setArticleSettings] = useState(defaultArticleState);
-	const applySettings = (
-		newSettings: SetStateAction<{
-			fontFamilyOption: OptionType;
-			fontColor: OptionType;
-			backgroundColor: OptionType;
-			contentWidth: OptionType;
-			fontSizeOption: OptionType;
-		}>
-	) => {
+
+	const applySettings = (newSettings: typeof defaultArticleState) => {
 		setArticleSettings(newSettings);
-	};
-	const resetSettings = () => {
-		setArticleSettings(defaultArticleState);
 	};
 
 	return (
 		<main
-			className={clsx(styles.main)}
+			className={styles.main}
 			style={
 				{
 					'--font-family': articleSettings.fontFamilyOption.value,
@@ -40,8 +29,6 @@ const App = () => {
 				isOpen={isSidebarOpen}
 				onClose={() => setSidebarOpen(false)}
 				onApply={applySettings}
-				onReset={resetSettings}
-				defaultSettings={articleSettings}
 			/>
 			<Article />
 			<ArrowButton
