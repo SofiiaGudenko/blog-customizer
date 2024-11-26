@@ -8,6 +8,10 @@
 	transition: transform 0.5s ease;
 }
 
+.container::-webkit-scrollbar {
+	display: none;
+}
+
 .container_open {
 	transform: translate(0);
 }
@@ -16,13 +20,19 @@
 	display: flex;
 	flex-shrink: 0;
 	flex-direction: column;
+	row-gap: 50px;
 	box-sizing: border-box;
 	width: 616px;
 	height: auto;
 	min-height: 100%;
 	padding: 50px 31px;
+	overflow: auto;
 	background-color: #ffffff;
 	border-right: 1px solid #000000;
+}
+
+.form::-webkit-scrollbar {
+	display: none;
 }
 
 .bottomContainer {
