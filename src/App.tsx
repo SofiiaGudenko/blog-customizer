@@ -1,14 +1,11 @@
 import styles from './styles/index.module.scss';
-import { ArrowButton } from './ui/arrow-button/ArrowButton';
 import { useState, CSSProperties } from 'react';
 import { Article } from './components/article/Article';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
 import { defaultArticleState } from './constants/articleProps';
 
 const App = () => {
-	const [isSidebarOpen, setSidebarOpen] = useState(false);
 	const [articleSettings, setArticleSettings] = useState(defaultArticleState);
-
 	const applySettings = (newSettings: typeof defaultArticleState) => {
 		setArticleSettings(newSettings);
 	};
@@ -25,16 +22,8 @@ const App = () => {
 					'--bg-color': articleSettings.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm
-				isOpen={isSidebarOpen}
-				onClose={() => setSidebarOpen(false)}
-				onApply={applySettings}
-			/>
+			<ArticleParamsForm onApply={applySettings} />
 			<Article />
-			<ArrowButton
-				isOpen={isSidebarOpen}
-				onClick={() => setSidebarOpen(!isSidebarOpen)}
-			/>
 		</main>
 	);
 };
